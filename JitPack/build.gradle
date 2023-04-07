@@ -1,19 +1,19 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
+
 }
 
+group = 'com.github.Kingforv'
+version = '1.0.0'
 android {
-    namespace 'com.lckj.jitpack'
-    compileSdk 32
-
+    compileSdkVersion 32
     defaultConfig {
-        minSdk 21
-        targetSdk 32
-
+        minSdkVersion 21
+        targetSdkVersion 32
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -27,33 +27,33 @@ android {
 
 }
 
-
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.Kingforv'
+                artifactId = 'android-example'
+                version = '1.0.0'
+            }
+        }
+    }
+}
 
-
-
-//---------------------------------------------
-// 指定编码
-
-//task buildWithJavadoc(type: GradleBuild) {
-//    tasks = ['build', 'javadoc']
-//}
-//
-//build.dependsOn buildWithJavadoc
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
 //指定生成的javadoc文档编码格式，防止javadoc中文乱码
-
 tasks.withType(Javadoc) {
     options {
         encoding "UTF-8"
@@ -64,10 +64,8 @@ tasks.withType(Javadoc) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    failOnError false
+
 }
-
-
 // 制作文档(Javadoc)
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
