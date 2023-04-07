@@ -43,8 +43,15 @@ afterEvaluate {
                 groupId = 'com.github.Kingforv'
                 artifactId = 'android-example'
                 version = '1.0.0'
+                // 将 javadocJar 添加到 artifacts 中
+                artifacts {
+                    archives javadocJar
+                }
             }
+
         }
+        // 将javadoc任务添加到publish任务的依赖中
+        publish.dependsOn(javadocJar)
     }
 }
 
