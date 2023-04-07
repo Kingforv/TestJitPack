@@ -56,6 +56,8 @@ afterEvaluate {
 }
 
 
+
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
@@ -68,12 +70,19 @@ tasks.withType(Javadoc) {
         links "http://docs.oracle.com/javase/7/docs/api"
     }
 }
+// 生成jar包的task
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+// 生成jarDoc的task
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 
 }
-// 制作文档(Javadoc)
+// 生成javaDoc的jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
@@ -81,6 +90,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 }
 artifacts {
+    archives sourcesJar
     archives javadocJar
 }
 
