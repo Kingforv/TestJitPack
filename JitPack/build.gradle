@@ -44,14 +44,23 @@ afterEvaluate {
                 artifactId = 'android-example'
                 version = '1.0.0'
                 // 将 javadocJar 添加到 artifacts 中
-                artifacts {
-                    archives javadocJar
+                artifact javadocJar {
+                    classifier = 'javadoc'
+                }
+
+                javadoc {
+                    options {
+                        encoding "UTF-8"
+                        charSet 'UTF-8'
+                        author true
+                        version true
+                        links("http://docs.oracle.com/javase/8/docs/api/")
+                    }
                 }
             }
 
         }
-        // 将javadoc任务添加到publish任务的依赖中
-        publish.dependsOn(javadocJar)
+
     }
 }
 
